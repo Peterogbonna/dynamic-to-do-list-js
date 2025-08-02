@@ -10,34 +10,24 @@ document.addEventListener('DOMContentLoaded', function() {
         // Retrieve and trim the value from the task input field
         const taskText = taskInput.value.trim();
 
-        // Check if taskText is not empty ("")
+        // Check if taskText is not empty
         if (taskText === "") {
-            // If it is empty, use alert to prompt the user to enter a task.
             alert("Please enter a task.");
             return;
         }
 
-        // Task Creation and Removal:
-        // Create a new li element.
+        // Task Creation:
         const listItem = document.createElement('li');
-        // Set its textContent to taskText.
         listItem.textContent = taskText;
 
-        // Create a new button element for removing the task.
+        // Create a remove button
         const removeButton = document.createElement('button');
-        // Set its textContent to "Remove"
         removeButton.textContent = "Remove";
-        // Give it a class name of 'remove-btn'.
         removeButton.className = 'remove-btn';
-
-        // Assign an onclick event to the remove button
-        removeButton.onclick = function() {
-            // When triggered, remove the li element from taskList.
-            taskList.removeChild(listItem);
-        };
 
         // Append the remove button to the li element
         listItem.appendChild(removeButton);
+
         // Append the li to taskList.
         taskList.appendChild(listItem);
 
@@ -45,15 +35,28 @@ document.addEventListener('DOMContentLoaded', function() {
         taskInput.value = "";
     }
 
-    // Attach Event Listeners:
-    // Add an event listener to addButton that calls addTask when the button is clicked.
+    // Attach Event Listeners to the buttons and input
     addButton.addEventListener('click', addTask);
 
-    // Add an event listener to taskInput for the 'keypress' event
     taskInput.addEventListener('keypress', function(event) {
-        // Check if event.key is equal to 'Enter' before calling addTask.
         if (event.key === 'Enter') {
             addTask();
         }
     });
+    
+    // Use event delegation on the taskList to handle clicks on dynamically created elements
+    taskList.addEventListener('click', function(event) {
+        // Check if the clicked element is an li
+        if (event.target.tagName === 'LI') {
+            // Toggle the 'completed' class for marking as done.
+            event.target.classList.toggle('completed');
+        }
+        
+        // Check if the clicked element is the remove button
+        if (event.target.classList.contains('remove-btn')) {
+            // Remove the parent li element
+            event.target.parentNode.remove();
+        }
+    });
+
 });
